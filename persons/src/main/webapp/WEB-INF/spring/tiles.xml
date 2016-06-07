@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC 
+  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" 
+  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+    <!-- //Основной сайт. основные страницы с отборами и index -->
+    <definition name="base.definition" template="/WEB-INF/views/tiles/mainTemplate.jsp">
+    	<put-attribute name="Header" value="/WEB-INF/views/tiles/Header.jsp"></put-attribute> 
+        <put-attribute name="Body" value=""></put-attribute>
+        <put-attribute name="Footer" value="/WEB-INF/views/tiles/Footer.jsp"></put-attribute>
+    </definition>
+    
+    <definition name="Index" extends="base.definition">
+        <put-attribute name="Body" value="/WEB-INF/views/Index.jsp"></put-attribute>
+    </definition>
+    
+    <definition name="Open" extends="base.definition">
+        <put-attribute name="Body" value="/WEB-INF/views/Open.jsp"></put-attribute>
+    </definition>
+
+   <definition name="Edit" extends="base.definition">
+        <put-attribute name="Body" value="/WEB-INF/views/Edit.jsp"></put-attribute>
+   </definition>
+    
+ 
+</tiles-definitions>
