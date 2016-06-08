@@ -14,5 +14,4 @@
     <definition name="Index" extends="base.definition">
         <put-attribute name="Body" value="/WEB-INF/views/Index.jsp"></put-attribute>
     </definition>
- 
 </tiles-definitions>
