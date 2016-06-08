@@ -1,6 +1,5 @@
 package controllers;
 
-import java.util.HashSet;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,62 +49,38 @@ public class MainController {
 
 		model.addAttribute("list", baseDAO.getPersons(column,sort, searchString, numPage));
 		model.addAttribute("mainText", "Список сотрудников");
+		model.addAttribute("departmentList", baseDAO.getDepartments());
+		model.addAttribute("positionList", baseDAO.getPositions()); 
+		
 		session.setAttribute("columnSort", column);
 		session.setAttribute("sort", sort);
 		session.setAttribute("search", searchString);
 		
 		return "Index";
 	}		
-
-	@RequestMapping(value = { "/Open"}, method = {RequestMethod.POST, RequestMethod.GET})
-	public String open(
-			@RequestParam(value = "id", defaultValue="0", required=false) int id,
-			@RequestParam(value = "variant", defaultValue="Open", required=false) String variant, // Open/Edit/Create
-			HttpServletRequest request,Locale locale, Model model) {
-		
-		HttpSession session=request.getSession();
-		
-		if ("Open".equals(variant)){
-			model.addAttribute("person", baseDAO.getPersonById(id));
-			model.addAttribute("mainText", "Данные о сотруднике:");
-		}else{
-			model.addAttribute("departmentList", baseDAO.getDepartments());
-			model.addAttribute("positionList", baseDAO.getPositions()); 
-			
-			if ("Create".equals(variant)){
-				model.addAttribute("person", new Person());
-				variant="Edit";							//одна страница для 2-х режимов
-				model.addAttribute("mainText", "Новый сотрудник:");
-			}else if ("Edit".equals(variant)){
-				model.addAttribute("person", baseDAO.getPersonById(id));
-				model.addAttribute("mainText", "Изменить сотрудника:");
-			}
-		}
-		
-		return variant;
-	}
 	
 	@RequestMapping(value = { "/save"}, method = {RequestMethod.POST, RequestMethod.GET})
 	public String save(
-			@RequestParam(value = "id", defaultValue="", required=false) int id,
+			@RequestParam(value = "id", defaultValue="0", required=false) int id,
 			@RequestParam(value = "name", defaultValue="", required=false) String name,
 			@RequestParam(value = "surname", defaultValue="", required=false) String surname,
 			@RequestParam(value = "positionId", defaultValue="0", required=false) int positionId,
 			@RequestParam(value = "departmentId", defaultValue="0", required=false) int departmentId,
-			@RequestParam(value = "variant", defaultValue="", required=false) String variant,
 			HttpServletRequest request,Locale locale, Model model) {
 		
-		if ("Сохранить".equals(variant)){
-			Person currentPerson=baseDAO.getPersonById(id);
+		Person currentPerson=new Person();
+		if (id!=0){
+			currentPerson=baseDAO.getPersonById(id);
 			if (currentPerson==null){
 				currentPerson=new Person();
 			}
-			currentPerson.setName(name);
-			currentPerson.setSurname(surname);
-			currentPerson.setPosition(baseDAO.getPositionById(positionId));
-			currentPerson.setDepartment(baseDAO.getDepartmentById(departmentId));
-			baseDAO.savePerson(currentPerson);
-		}
+		} 
+			
+		currentPerson.setName(name);
+		currentPerson.setSurname(surname);
+		currentPerson.setPosition(baseDAO.getPositionById(positionId));
+		currentPerson.setDepartment(baseDAO.getDepartmentById(departmentId));
+		baseDAO.savePerson(currentPerson);
 		
 		return "redirect:index";
 	}	

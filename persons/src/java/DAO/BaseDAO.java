@@ -22,6 +22,11 @@ import org.apache.log4j.Logger;
 
 @Repository
 public class BaseDAO extends DAO implements InterfacePersonDAO{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5554783446444978387L;
+
 	@Autowired
 	private SessionFactory sessionFactory;
 	
@@ -60,6 +65,7 @@ public class BaseDAO extends DAO implements InterfacePersonDAO{
         Session session = util.getSession();
 
         try {
+        	session.flush();
 	        transaction = session.beginTransaction();
 	        Query query=session.createQuery("from Person "
 	        		+(searchString.length()>0?"where (name like CONCAT('%', :searchStr, '%')) or (surname like CONCAT('%', :searchStr, '%'))":"")
@@ -127,6 +133,7 @@ public class BaseDAO extends DAO implements InterfacePersonDAO{
 		HibernateUtil util = HibernateUtil.getHibernateUtil();
 		Session session = util.getSession();
 		try {
+			session.flush();
 			result=(Person) session.get(Person.class, id); //.load(Person.class, id);
 		} catch (HibernateException e) {
         	System.out.println(e);

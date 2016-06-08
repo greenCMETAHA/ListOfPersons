@@ -1,23 +1,21 @@
 package DAO;
 
 import org.hibernate.*;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-
 import DAO.interfaces.InterfaceDAO;
 import DAO.utils.HibernateUtil;
 import utils.Utils;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 
 public class DAO<T> implements InterfaceDAO<T> {
 	/* implemented from interface InterfaceDAO */
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4401808106484975367L;
 	private SessionFactory sessionFactory;
     /* variable for working with class. Pattern Singleton*/
     private static DAO sessionDAO;

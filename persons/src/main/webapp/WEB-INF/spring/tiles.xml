@@ -14,14 +14,5 @@
     <definition name="Index" extends="base.definition">
         <put-attribute name="Body" value="/WEB-INF/views/Index.jsp"></put-attribute>
     </definition>
-    
-    <definition name="Open" extends="base.definition">
-        <put-attribute name="Body" value="/WEB-INF/views/Open.jsp"></put-attribute>
-    </definition>
-
-   <definition name="Edit" extends="base.definition">
-        <put-attribute name="Body" value="/WEB-INF/views/Edit.jsp"></put-attribute>
-   </definition>
-    
  
 </tiles-definitions>

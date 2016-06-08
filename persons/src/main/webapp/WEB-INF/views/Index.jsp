@@ -29,6 +29,7 @@
 <div align="center">
 	<table class="table table-striped" >
 		<tr align="center">
+			<td><span class="glyphicon glyphicon-eye-open"></td>
 			<td>Имя 
 					<a href="index?column=name&sort=DESC"><span class="glyphicon glyphicon-chevron-up"></span></a>
 					<a href="index?column=name&sort=ASC"><span class="glyphicon glyphicon-chevron-down"></span></a>
@@ -50,56 +51,140 @@
 		<c:forEach var="current" items="${requestScope.list}">
 			<tr>
 				<td align="center">
-					<a href="Open?id=${current.getId()}"><c:out value="${current.getName()}"/></a>
-				</td>
-				<td align="center">
-					<a href="Open?id=${current.getId()}"><c:out value="${current.getSurname()}"/></a>
-				</td>
-				<td align="center">
-					<a href="Open?id=${current.getId()}"><c:out value="${current.getPosition().getName()}"/></a>
-				</td>
-				<td align="center">
-					<a href="Open?id=${current.getId()}"><c:out value="${current.getDepartment().getName()}"/></a>
-				</td>
-				<td align="center">
-					<a href="Open?id=${current.getId()}&variant=Edit" title="Редактировать"><span class="glyphicon glyphicon-pencil"></span></a> 
-					<a href="Delete?id=${current.getId()}" title="Удалить"><span class="glyphicon glyphicon-remove"></a>
+					<button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg-${current.getId()}">
+						<span class="glyphicon glyphicon-eye-open">
+					</button>
 					
-					<button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Большая модаль</button>
-					
-					<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+					<div class="modal fade bs-example-modal-lg-${current.getId()}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 					  <div class="modal-dialog modal-lg">
 					    <div class="modal-content">
-					      ...
+	
+
+								<div align="center">
+									<table >
+										<tr>
+											<th align="right" width="20%">Имя </th>
+											<td align="left" width="40%"> <c:out  value="${current.getName()}" /></td>
+										</tr>
+										<tr>
+											<th align="right">Фамилия </th>
+											<td align="left"> <c:out  value="${current.getSurname()}" /></td>
+										</tr>
+										<tr>
+											<th align="right">Должность </th>
+											<td align="left"> <c:out  value="${current.getPosition().getName()}" /></td>
+										</tr>
+										<tr>
+											<th align="right">Подразделение </th>
+											<td align="left"> <c:out  value="${current.getDepartment().getName()}" /></td>
+										</tr>
+									</table>
+								</div>
+									
+					     
 					    </div>
 					  </div>
 					</div>	
+				</td>
+				<td align="center"><c:out value="${current.getName()}"/>
+				</td>
+				<td align="center"><c:out value="${current.getSurname()}"/>
+				</td>
+				<td align="center">
+					<c:out value="${current.getPosition().getName()}"/>
+				</td>
+				<td align="center">
+					<c:out value="${current.getDepartment().getName()}"/>
+				</td>
+				<td align="center">
+					<button class="btn btn-primary" data-toggle="modal" data-target="#myModal-${current.getId()}">
+						<span class="glyphicon glyphicon-pencil"></span>
+					</button>
+					<form action="Delete" method="POST">
+						<input name="id" value="${current.getId()}" hidden>
+						<button class="btn btn-primary" >
+							<span class="glyphicon glyphicon-remove">
+						</button>
+					</form>
 					
-					
-<!-- 					Button trigger modal -->
-<!-- <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal"> -->
-<!--         Посмотреть демо -->
-<!--       </button> -->
-
-<!-- <!-- Modal --> -->
-<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
-<!--   <div class="modal-dialog"> -->
-<!--     <div class="modal-content"> -->
-<!--       <div class="modal-header"> -->
-<!--         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
-<!--         <h4 class="modal-title" id="myModalLabel">Название модали</h4> -->
-<!--       </div> -->
-<!--       <div class="modal-body"> -->
-<!--         ... -->
-<!--       </div> -->
-<!--       <div class="modal-footer"> -->
-<!--         <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button> -->
-<!--         <button type="button" class="btn btn-primary">Сохранить изменения</button> -->
-<!--       </div> -->
-<!--     </div> -->
-<!--   </div> -->
-<!-- </div>				 -->
-					
+					<form action="save" method="post">
+					<!-- Modal -->
+					<div class="modal fade" id="myModal-${current.getId()}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						
+						  <div class="modal-dialog">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						        <h4 class="modal-title" id="myModalLabel">Изменить сотрудника:</h4>
+						      </div>
+						      <div class="modal-body">
+						        
+	
+								<table>
+									<tr>
+										<td align="right">Имя </td>
+										<td align="left">
+											<input hidden="hidden" name="id" value="${current.getId()}">
+											<input name="name" type="text" class="form-control" value="${current.getName()}">
+										</td>
+									</tr>
+									<tr>
+										<td align="right">Фамилия </td>
+										<td align="left">
+											<input name="surname" type="text" class="form-control" value="${current.getSurname()}">
+										</td>
+									</tr>
+									<tr>
+										<td align="right">Должность </td>
+										<td align="left">
+											<select name="positionId" class="form-control">
+											    <option disabled>Выберите должность </option>
+											    <c:forEach var="currentPosition" items="${requestScope.positionList}">
+											    	<c:if test="${current.getPosition().getId()==currentPosition.getId()}">
+											    		<option selected value="${currentPosition.getId()}">
+											    			<c:out value="${currentPosition.getName()}"/> 
+											    		</option>
+											    	</c:if>	
+											    	<c:if test="${current.getPosition().getId()!=currentPosition.getId()}">
+											    		<option value="${currentPosition.getId()}">
+											    			<c:out value="${currentPosition.getName()}"/> 
+											    		</option>
+											    	</c:if>	
+											    </c:forEach>
+										   </select>				
+										</td>
+									</tr>
+									<tr>
+										<td align="right">Подразделение </td>
+										<td align="left">
+											<select name="departmentId" class="form-control">
+											    <option disabled>Выберите подразделение</option>
+											    <c:forEach var="currentDepartment" items="${requestScope.departmentList}">
+											    	<c:if test="${current.getDepartment().getId()==currentDepartment.getId()}">
+											    		<option selected value="${currentDepartment.getId()}">
+											    			<c:out value="${currentDepartment.getName()}"/> 
+											    		</option>
+											    	</c:if>	
+											    	<c:if test="${current.getDepartment().getId()!=currentDepartment.getId()}">
+											    		<option value="${currentDepartment.getId()}">
+											    			<c:out value="${currentDepartment.getName()}"/> 
+											    		</option>
+											    	</c:if>	
+											    </c:forEach>
+										   </select>			
+									</tr>
+							</table>
+	
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-default" data-dismiss="modal" >Закрыть</button>
+						        <button type="submit" class="btn btn-primary" >Сохранить изменения</button>
+						      </div>
+						    </div>
+						  </div>
+						 
+					</div>						
+					</form>	
 				</td>
 			
 			</tr>
@@ -108,11 +193,71 @@
 </div>
 <br><p>
 
-	<form action="Open" method="POST">
-		<input hidden="hidden" name="variant" value="Create">
-		<div align="center">
-			<input type="submit" value="Новый сотрудник">
-		</div>
-	</form>
+	<button class="btn btn-primary" data-toggle="modal" data-target="#myModal-A">
+		<span class="glyphicon glyphicon-plus"></span>Создать нового сотрудника
+	</button>
+
+	<div class="modal fade" id="myModal-A" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title" id="myModalLabel">Изменить сотрудника:</h4>
+		      </div>
+		      <form action="save" method="POST">
+		      <div class="modal-body">
+		        
+
+				<table>
+					<tr>
+						<td align="right">Имя </td>
+						<td align="left">
+							<input hidden="hidden" name="id" value="">
+							<input name="name" type="text" class="form-control" value="">
+						</td>
+					</tr>
+					<tr>
+						<td align="right">Фамилия </td>
+						<td align="left">
+							<input name="surname" type="text" class="form-control" value="">
+						</td>
+					</tr>
+					<tr>
+						<td align="right">Должность </td>
+						<td align="left">
+							<select name="positionId" class="form-control">
+							    <option disabled>Выберите должность </option>
+							    <c:forEach var="currentPosition" items="${requestScope.positionList}">
+						    		<option value="${currentPosition.getId()}">
+						    			<c:out value="${currentPosition.getName()}"/> 
+						    		</option>
+						    </c:forEach>
+					   </select>				
+					</td>
+				</tr>
+				<tr>
+					<td align="right">Подразделение </td>
+					<td align="left">
+						<select name="departmentId" class="form-control">
+						    <option disabled>Выберите подразделение</option>
+						    <c:forEach var="currentDepartment" items="${requestScope.departmentList}">
+					    		<option value="${currentDepartment.getId()}">
+					    			<c:out value="${currentDepartment.getName()}"/> 
+					    		</option>
+						    </c:forEach>
+					   </select>			
+				</tr>
+			</table>
+
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal" >Закрыть</button>
+	        <button type="submit" class="btn btn-primary" >Сохранить изменения</button>
+	      </div>
+	      </form>
+	    </div>
+	  </div>
+	</div>						
 </body>  
 </html>
